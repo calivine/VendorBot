@@ -25,6 +25,9 @@ local JM_Control = CreateFrame("Button", "UIHideShowButton", UIParent, "UIPanelB
 JMUtil:MakeSettingsButton(JM_Control);
 JMUtil:MakeMovable(JM_Control);
 
+local JM_Settings = CreateFrame("Frame", "JM_Settings", UIParent);
+
+
 function JM:OnEvent(event, ...)
     if ( event == "BAG_UPDATE" ) then
         local remaining = self:SlotsRemaining();

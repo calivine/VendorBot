@@ -8,7 +8,10 @@ function JMUtil:MakeMovable(frame)
 end
 
 function JMUtil:MakeSettingsFrame(frame)
-    
+    frame:SetFrameStrata("HIGH");
+    frame:SetPoint("CENTER");
+    frame:SetHeight(275);
+    frame:SetWidth(275);
 end
 
 function JMUtil:MakeSettingsButton(frame)

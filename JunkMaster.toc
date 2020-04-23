@@ -1,0 +1,8 @@
+## Title: JunkMaster (Classic)
+## Interface: 11304
+## Notes: Auto sell junk to merchants
+##
+SlashCmds.lua
+JMUtil.lua
+JunkMaster.xml
+JunkMaster.lua

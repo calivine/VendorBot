@@ -3,6 +3,5 @@
 ## Notes: Auto sell junk to merchants
 ##
 SlashCmds.lua
-JMUtil.lua
 JunkMaster.xml
 JunkMaster.lua

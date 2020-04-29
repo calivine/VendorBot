@@ -21,28 +21,36 @@ JM_Texture:SetAlpha(1);
 JM_Texture:SetHeight(TEXT_DISPAY_HEIGHT);
 JM_Texture:SetWidth(TEXT_DISPLAY_WIDTH);
 
-local JM_Control = CreateFrame("Button", "UIHideShowButton", UIParent, "UIPanelButtonTemplate");
-JMUtil:MakeSettingsButton(JM_Control);
-JMUtil:MakeMovable(JM_Control);
-
-local JM_Settings = CreateFrame("Frame", "JM_Settings", UIParent);
+local AS = CreateFrame("Button", "AS", UIParent, "UIPanelButtonTemplate");
+AS:SetHeight(35);
+AS:SetWidth(75);
+AS:SetFrameStrata("HIGH");
+AS:SetText("Sell Junk");
+AS:ClearAllPoints();
+AS:SetPoint("LEFT", 75, -75);
+AS:RegisterForClicks("LeftButtonDown");
+AS:Hide();
 
 
 function JM:OnEvent(event, ...)
     if ( event == "BAG_UPDATE" ) then
         local remaining = self:SlotsRemaining();
         remainingSlotsText:SetFormattedText("%d", remaining);    
+    elseif ( event == "MERCHANT_SHOW" ) then
+        AS:Show();
+    elseif ( event == "MERCHANT_CLOSED" ) then
+        AS:Hide();
     elseif ( event == "PLAYER_LOGIN" ) then
         self:Initialize();
-    elseif ( event == "MERCHANT_SHOW" ) then
-        self:SellJunk();
-    elseif ( event == "BAG_UPDATE" ) then
-        local remaining = self:SlotsRemaining();
-        remainingSlotsText:SetFormattedText("%d", remaining);
     end
 end
 
 JM:SetScript("OnEvent", JM.OnEvent);
+
+AS:SetScript("OnClick", function(self, button, down) 
+    JM:SellJunk();
+end);
+
 
 if ( IsLoggedIn() ) then
     JM:Initialize();
@@ -52,9 +60,10 @@ end
 
 function JM:Initialize()
     self:RegisterEvent("MERCHANT_SHOW");
+    self:RegisterEvent("MERCHANT_CLOSED");
     self:RegisterEvent("BAG_UPDATE");
     self:CreateFrame();
-    print('JunkMaster v1.0.2');
+    print('JunkMaster v1.0.3');
 end
 
 function JM:CreateFrame()
@@ -95,17 +104,3 @@ function JM:SlotsRemaining()
     end
     return slotsRemaining;
 end
-
-function JM:ItemQuality(id)
-    local ITEM_QUALITY = {
-        [0] = "Poor",
-        [1] = "Common",
-        [2] = "Uncommon",
-        [3] = "Rare",
-        [4] = "Epic",
-        [5] = "Legendary"
-    }
-    return ITEM_QUALITY[id];
-end
-
-

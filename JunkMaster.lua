@@ -22,12 +22,14 @@ JM_Texture:SetHeight(TEXT_DISPAY_HEIGHT);
 JM_Texture:SetWidth(TEXT_DISPLAY_WIDTH);
 
 local AS = CreateFrame("Button", "AS", UIParent, "UIPanelButtonTemplate");
-AS:SetHeight(35);
-AS:SetWidth(75);
-AS:SetFrameStrata("HIGH");
-AS:SetText("Sell Junk");
+AS:SetHeight(40);
+AS:SetWidth(40);
+AS:SetFrameStrata("MEDIUM");
+AS:SetFrameLevel(3);
+AS:SetToplevel(true);
+AS:SetText("SJ");
 AS:ClearAllPoints();
-AS:SetPoint("LEFT", 75, -75);
+AS:SetPoint("LEFT", MerchantRepairItemButton, 105, -10);
 AS:RegisterForClicks("LeftButtonDown");
 AS:Hide();
 
@@ -37,6 +39,12 @@ function JM:OnEvent(event, ...)
         local remaining = self:SlotsRemaining();
         remainingSlotsText:SetFormattedText("%d", remaining);    
     elseif ( event == "MERCHANT_SHOW" ) then
+        AS:ClearAllPoints();
+        if ( MerchantRepairAllButton:IsShown() ) then 
+            AS:SetPoint("TOPLEFT", MerchantBuyBackItem, "TOPLEFT", -120, 0);
+        else
+            AS:SetPoint("TOPLEFT", MerchantBuyBackItem, "TOPLEFT", -60, 0);
+        end
         AS:Show();
     elseif ( event == "MERCHANT_CLOSED" ) then
         AS:Hide();

@@ -25,13 +25,40 @@ local AS = CreateFrame("Button", "AS", UIParent, "UIPanelButtonTemplate");
 AS:SetHeight(40);
 AS:SetWidth(40);
 AS:SetFrameStrata("MEDIUM");
-AS:SetFrameLevel(3);
+AS:SetFrameLevel(2);
 AS:SetToplevel(true);
 AS:SetText("SJ");
 AS:ClearAllPoints();
 AS:SetPoint("LEFT", MerchantRepairItemButton, 105, -10);
 AS:RegisterForClicks("LeftButtonDown");
 AS:Hide();
+
+
+local origTab2Click = MerchantFrameTab2:GetScript("OnClick");
+
+local function newTab2Click(...)
+    AS:ClearAllPoints();
+    AS:Hide();
+    if ( origTab2Click ) then
+        return origTab2Click(...);
+    end
+end
+
+
+local origTab1Click = MerchantFrameTab1:GetScript("OnClick");
+local function newTab1Click(...)
+    if ( MerchantRepairAllButton:IsVisible() ) then 
+        AS:SetPoint("TOPLEFT", MerchantBuyBackItem, "TOPLEFT", -120, 0);
+    else
+        AS:SetPoint("TOPLEFT", MerchantBuyBackItem, "TOPLEFT", -60, 0);
+    end
+    AS:SetFrameStrata("HIGH");
+    AS:Show();
+    if ( origTab1Click ) then
+        return origTab1Click(...);
+    end
+end
+
 
 
 function JM:OnEvent(event, ...)
@@ -59,6 +86,8 @@ AS:SetScript("OnClick", function(self, button, down)
     JM:SellJunk();
 end);
 
+MerchantFrameTab1:SetScript("OnClick", newTab1Click);
+MerchantFrameTab2:SetScript("OnClick", newTab2Click);
 
 if ( IsLoggedIn() ) then
     JM:Initialize();

@@ -7,6 +7,8 @@ local TEXT_DISPLAY_SIZE = 14;
 local TEXT_DISPLAY_FONT_FLAG = "THICKOUTLINE";
 local TEXT_DISPLAY_FONT = "NumberFont_OutlineThick_Mono_Small";
 local TEXT_DISPLAY_FONT_SOURCE = "Fonts\\FRIZQT__.TTF";
+local AUTO_SELL_X_OFFSET = 91;
+local AUTO_SELL_Y_OFFSET = -417;
 
 local JM = CreateFrame("Frame", "JM", UIParent);
 JM:SetFrameStrata("HIGH");
@@ -22,36 +24,42 @@ JM_Texture:SetHeight(TEXT_DISPAY_HEIGHT);
 JM_Texture:SetWidth(TEXT_DISPLAY_WIDTH);
 
 local AS = CreateFrame("Button", "AS", UIParent, "UIPanelButtonTemplate");
-AS:SetHeight(40);
-AS:SetWidth(40);
-AS:SetFrameStrata("MEDIUM");
+AS:SetHeight(20);
+AS:SetWidth(75);
+AS:SetFrameStrata("HIGH");
 AS:SetFrameLevel(2);
 AS:SetToplevel(true);
-AS:SetText("SJ");
+AS:SetText("$$$");
 AS:ClearAllPoints();
-AS:SetPoint("LEFT", MerchantRepairItemButton, 105, -10);
+AS:SetPoint("TOPLEFT", MerchantFrame, AUTO_SELL_X_OFFSET, AUTO_SELL_Y_OFFSET);
 AS:RegisterForClicks("LeftButtonDown");
+
+function AutoSellButton_OnEnter(self, motion)
+    GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
+    GameTooltip:SetText("Sell All Junk");
+    GameTooltip:Show();
+end
+
+function AutoSellButton_OnLeave(self, motion)
+    GameTooltip:Hide();
+end
+
+AS:SetScript("OnEnter", AutoSellButton_OnEnter);
+AS:SetScript("OnLeave", AutoSellButton_OnLeave);
+
 AS:Hide();
 
-
 local origTab2Click = MerchantFrameTab2:GetScript("OnClick");
-
 local function newTab2Click(...)
-    AS:ClearAllPoints();
     AS:Hide();
     if ( origTab2Click ) then
         return origTab2Click(...);
     end
 end
 
-
 local origTab1Click = MerchantFrameTab1:GetScript("OnClick");
 local function newTab1Click(...)
-    if ( MerchantRepairAllButton:IsVisible() ) then 
-        AS:SetPoint("TOPLEFT", MerchantBuyBackItem, "TOPLEFT", -120, 0);
-    else
-        AS:SetPoint("TOPLEFT", MerchantBuyBackItem, "TOPLEFT", -60, 0);
-    end
+    AS:SetPoint("TOPLEFT", MerchantFrame, AUTO_SELL_X_OFFSET, AUTO_SELL_Y_OFFSET);
     AS:SetFrameStrata("HIGH");
     AS:Show();
     if ( origTab1Click ) then
@@ -59,19 +67,52 @@ local function newTab1Click(...)
     end
 end
 
+local repairItemButton = MerchantRepairItemButton:GetScript("OnClick");
+local function newMerchantRepairItem(...)
+    AS:SetPoint("TOPLEFT", MerchantFrame, AUTO_SELL_X_OFFSET, AUTO_SELL_Y_OFFSET);
+    AS:SetFrameStrata("HIGH");
+    AS:Show();
+    if ( repairItemButton ) then
+        return repairItemButton(...);
+    end
+end
 
+local repairAllItemsButton = MerchantRepairAllButton:GetScript("OnClick");
+local function newMerchantRepairAll(...)
+    AS:SetPoint("TOPLEFT", MerchantFrame, AUTO_SELL_X_OFFSET, AUTO_SELL_Y_OFFSET);
+    AS:SetFrameStrata("HIGH");
+    AS:Show();
+    if ( repairAllItemsButton ) then
+        return repairAllItemsButton(...);
+    end
+end
+
+local nextPageButton = MerchantNextPageButton:GetScript("OnClick");
+local function newNextPageButton(...)
+    AS:SetPoint("TOPLEFT", MerchantFrame, AUTO_SELL_X_OFFSET, AUTO_SELL_Y_OFFSET);
+    AS:SetFrameStrata("HIGH");
+    AS:Show();
+    if ( nextPageButton ) then
+        return nextPageButton(...);
+    end
+end
+
+local prevPageButton = MerchantPrevPageButton:GetScript("OnClick");
+local function newPrevPageButton(...)
+    AS:SetPoint("TOPLEFT", MerchantFrame, AUTO_SELL_X_OFFSET, AUTO_SELL_Y_OFFSET);
+    AS:SetFrameStrata("HIGH");
+    AS:Show();
+    if ( prevPageButton ) then
+        return prevPageButton(...);
+    end
+end
 
 function JM:OnEvent(event, ...)
     if ( event == "BAG_UPDATE" ) then
         local remaining = self:SlotsRemaining();
         remainingSlotsText:SetFormattedText("%d", remaining);    
     elseif ( event == "MERCHANT_SHOW" ) then
-        AS:ClearAllPoints();
-        if ( MerchantRepairAllButton:IsShown() ) then 
-            AS:SetPoint("TOPLEFT", MerchantBuyBackItem, "TOPLEFT", -120, 0);
-        else
-            AS:SetPoint("TOPLEFT", MerchantBuyBackItem, "TOPLEFT", -60, 0);
-        end
+        AS:SetPoint("TOPLEFT", MerchantFrame, AUTO_SELL_X_OFFSET, AUTO_SELL_Y_OFFSET);
         AS:Show();
     elseif ( event == "MERCHANT_CLOSED" ) then
         AS:Hide();

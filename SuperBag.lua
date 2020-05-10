@@ -141,7 +141,7 @@ function JM:Initialize()
     self:RegisterEvent("MERCHANT_CLOSED");
     self:RegisterEvent("BAG_UPDATE");
     self:CreateFrame();
-    print('JunkMaster v1.0.3');
+    print('SuperBag! v1.0.0');
 end
 
 function JM:CreateFrame()

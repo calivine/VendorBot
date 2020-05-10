@@ -1,0 +1,7 @@
+## Title: SuperBag! (Classic)
+## Interface: 11304
+## Notes: Auto sell junk to merchants.
+##
+SlashCmds.lua
+SuperBag.xml
+SuperBag.lua
